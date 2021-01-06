@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TodoDataService } from '../service/data/todo-data.service';
 
 export class Todo {
   constructor(
@@ -6,9 +7,7 @@ export class Todo {
     public description: string,
     public done: boolean,
     public targetDate: Date
-  ){
-
-  }
+  ){}
 }
 
 @Component({
@@ -18,15 +17,39 @@ export class Todo {
 })
 export class ListTodosComponent implements OnInit {
 
-  todos = [
-    new Todo(1, 'Learn to dance', false, new Date()),
-    new Todo(2, 'Become an Expert at Angular', false, new Date()),
-    new Todo(3, 'Visit India', false, new Date())
-  ]
+  todos: Todo[];
+  //= [
+  //  new Todo(1, 'Learn to dance', false, new Date()),
+  //  new Todo(2, 'Become an Expert at Angular', false, new Date()),
+  //  new Todo(3, 'Visit India', false, new Date())
+  //]
 
-  constructor() { }
+  message: string;
+
+  constructor(private todoService:TodoDataService) { }
 
   ngOnInit() {
+    this.refreshTodos();
+  }
+
+  refreshTodos() {
+    this.todoService.retrieveAllTodos('augustoneto').subscribe(
+      response => {
+        console.log(response);
+        this.todos = response;
+      }
+    );
+  }
+
+  deleteTodo(id) {
+    console.log(`Delete todo ${id}`);
+    this.todoService.deleteTodo('augustoneto', id).subscribe(
+      response => {
+        console.log(response);
+        this.message = `Delete of todo ${id} successful!`;
+        this.refreshTodos();
+      }
+    );
   }
 
 }
