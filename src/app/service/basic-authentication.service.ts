@@ -29,6 +29,7 @@ export class BasicAuthenticationService {
           }
         )
       );
+    
   }
 
   executeAuthenticationService(username, password) {
@@ -63,7 +64,7 @@ export class BasicAuthenticationService {
 
   isUserLoggedIn() {
     let user = sessionStorage.getItem(AUTHENTICATED_USER);
-    return !(user === null)
+    return user !== null;
   }
 
   logout(){
